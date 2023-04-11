@@ -2,7 +2,7 @@
 # Usage: pip install -r requirements.txt
 
 # Base ------------------------------------------------------------------------
-# gitpython>=3.1.30
+#gitpython>=3.1.30
 matplotlib>=3.2.2
 numpy>=1.18.5
 opencv-python-headless==4.5.3.56
@@ -16,7 +16,6 @@ torch>=1.7.0  # see https://pytorch.org/get-started/locally (recommended)
 torchvision>=0.8.1
 tqdm>=4.64.0
 # protobuf<=3.20.1  # https://github.com/ultralytics/yolov5/issues/8012
-streamlit-lottie
 
 # Logging ---------------------------------------------------------------------
 tensorboard>=2.4.1
@@ -24,8 +23,9 @@ tensorboard>=2.4.1
 # comet
 
 # Plotting --------------------------------------------------------------------
-pandas>=2.0
+pandas>=1.1.4
 seaborn>=0.11.0
+streamlit-lottie
 
 # Export ----------------------------------------------------------------------
 # coremltools>=6.0  # CoreML export
@@ -37,7 +37,6 @@ seaborn>=0.11.0
 # tensorflow>=2.4.1  # TF exports (-cpu, -aarch64, -macos)
 # tensorflowjs>=3.9.0  # TF.js export
 # openvino-dev  # OpenVINO export
-
 
 # Deploy ----------------------------------------------------------------------
 setuptools>=65.5.1 # Snyk vulnerability fix
