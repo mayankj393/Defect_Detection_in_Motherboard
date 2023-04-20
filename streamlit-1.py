@@ -24,7 +24,7 @@ visibility: hidden;
 """,unsafe_allow_html=True)
 cascade_style = """<style>
 .block-container.css-z5fcl4.egzxvld4{
-    background-color: #ffef96;
+    background-color: #c7e602;
     align-content:center;
     
 }
@@ -32,6 +32,30 @@ cascade_style = """<style>
 .css-164nlkn.egzxvld1{
     display: none;
 }
+#.css-1x8cf1d.edgvbvh10{
+#    transition-duration: 0.4s;
+#    width: 250px;
+#    text-align: center;
+#    font-size: 28px;
+#    padding: 20px;
+#    width: 200px;
+#    transition: all 0.5s;
+#    cursor: pointer;
+#    margin: 5px;
+#}
+#.css-1x8cf1d.edgvbvh10:hover{
+#    background-color: #4CAF50; /* Green */
+#    color: white;
+#    width: 250px;
+#    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+#    text-align: center;
+#    font-size: 280px;
+#    padding: 20px;
+#    width: 200px;
+#    transition: all 0.5s;
+#    cursor: pointer;
+#    margin: 5px;
+#}
 h2{
     text-align: center;
     font-family:math;
@@ -163,6 +187,7 @@ section{
 .stAppViewContainer
 {
 background-color:#D4EDDA;
+#background-color:#b57d9c
 }
 
 
@@ -170,6 +195,7 @@ label div p{
     font-style:italic;
     font-weight: bold;
     border: 2px;
+    font-size: 50px;
     border-style: solid;
     border-radius: 5px;
     padding: 4px;
@@ -265,70 +291,77 @@ st.markdown(cascade_style, unsafe_allow_html=True)
 # img = Image.open(response.raw)
 
 # st.image(img, caption='Uploaded image', use_column_width=True)
-def urlInput():
-    url = st.text_input("Enter Image URL")
-    col1, col2 = st.columns(2)
-    if url!='':
-        response=requests.get(url)
-        img = Image.open(BytesIO(response.content))
-        with col1:
-              file_path = os.path.abspath(os.path.join("","temp.jpg"))
-              with open(file_path,"wb") as f:
-                 f.write(response.content)
-              command =f'python detect.py --source "{file_path}" --weights runs/detect/exp3/best.pt' 
-              return_value = os.popen(command).read()
-
-              image2 = Image.open(file_path)
-              new_img = image2.resize((600,400))
-              st.write("<div class='stAlert success'>{}</div>".format("Uploaded Image"), unsafe_allow_html=True)
-              st.info('Image path of Uploaed Image to local storage: : {}'.format(file_path))
-              st.image(new_img, use_column_width=True)
-        with col2:
-            path, str = detect.run(source=file_path)
-            img_paths = os.path.join(path,"temp.jpg")
-            image1 = Image.open(img_paths)
-            new_image2 = image1.resize((600, 400))
-            st.write("<div class='stAlert success'>{}</div>".format("Defect Detected Image "), unsafe_allow_html=True)
-            st.warning('Image path of defected Image : {}'.format(file_path))
-            st.image(new_image2, use_column_width=True)
-            st.write("<div class='stAlert success'>{}</div>".format("Succesulfully detected:"),unsafe_allow_html=True)
-            printresult(str)
-            os.remove(file_path)
-
-
+#def urlInput():
+#    
+#    url = st.text_input("")
+#    if st.button('Detect'):
+#        col1, col2 = st.columns(2)
+#        if url!='':
+#            response=requests.get(url)
+#            img = Image.open(BytesIO(response.content))
+#            with col1:
+#                  file_path = os.path.abspath(os.path.join("","temp.jpg"))
+#                  with open(file_path,"wb") as f:
+#                     f.write(response.content)
+#                  command =f'python detect.py --source "{file_path}" --weights runs/detect/exp3/best.pt' 
+#                  return_value = os.popen(command).read()
+#
+#                  image2 = Image.open(file_path)
+#                  new_img = image2.resize((600,400))
+#                  st.write("<div class='stAlert success'>{}</div>".format("Uploaded Image"), unsafe_allow_html=True)
+#                  st.image(new_img, use_column_width=True)
+#                  st.info('Image path of Uploaed Image to local storage: : {}'.format(file_path))
+#            with col2:
+#                path, str = detect.run(source=file_path)
+#                img_paths = os.path.join(path,"temp.jpg")
+#                image1 = Image.open(img_paths)
+#                new_image2 = image1.resize((600, 400))
+#                st.write("<div class='stAlert success'>{}</div>".format("Defect Detected Image "), unsafe_allow_html=True)
+#                st.image(new_image2, use_column_width=True)
+#                st.info('Image path of defected Image : {}'.format(file_path))
+#                st.write("<div class='stAlert success'>{}</div>".format("Succesulfully detected:"),unsafe_allow_html=True)
+#                printresult(str)
+#                os.remove(file_path)
+    
 def imgInput():
-    uploaded_file = st.file_uploader("Test Your Image Here...", type=['png', 'jpeg', 'jpg', 'JPG'])
-    col1, col2 = st.columns(2)
+    #st.write("<div class='stAlert success'>{}</div>".format("Test Your Image Here"),unsafe_allow_html=True)
+    uploaded_file = st.file_uploader("", type=['png', 'jpeg', 'jpg', 'JPG'])
+    try:
+        if st.button('Detect'):
+                col1, col2 = st.columns(2)
+                if uploaded_file is not None:
+                    img = Image.open(uploaded_file)
+                    with col1:
+                        file_path = os.path.abspath(os.path.join("", uploaded_file.name))
+                        with open(file_path, "wb") as f:
+                            f.write(uploaded_file.getbuffer())
+                        command = f'python detect.py --source "{file_path}" --weights runs/detect/exp3/best.pt'
+                        image = Image.open(file_path)
+                        new_image1 = image.resize((600, 400))
+                        return_value = os.popen(command).read()
+                        with st.spinner('Wait for it...'):
+                            time.sleep(5)
 
-    if uploaded_file is not None:
-        img = Image.open(uploaded_file)
-        with col1:
-            file_path = os.path.abspath(os.path.join("", uploaded_file.name))
-            with open(file_path, "wb") as f:
-                f.write(uploaded_file.getbuffer())
-            command = f'python detect.py --source "{file_path}" --weights runs/detect/exp3/best.pt'
-            image = Image.open(file_path)
-            new_image1 = image.resize((600, 400))
-            return_value = os.popen(command).read()
-            with st.spinner('Wait for it...'):
-                time.sleep(5)
+                        st.write("<div class='stAlert success'>{}</div>".format("Uploaded Image"), unsafe_allow_html=True)
 
-            st.write("<div class='stAlert success'>{}</div>".format("Uploaded Image"), unsafe_allow_html=True)
-            st.info('Image path of Uploaed Image: : {}'.format(file_path))
-            st.image(new_image1, use_column_width=True)
+                        st.image(new_image1, use_column_width=True)
+                        st.info('Image path of Uploaed Image: : {}'.format(file_path))
 
-        with col2:
-            path,str = detect.run(source=file_path)
-            img_paths = os.path.join(path, uploaded_file.name)
+                    with col2:
+                        path,str = detect.run(source=file_path)
+                        img_paths = os.path.join(path, uploaded_file.name)
 
-            image1 = Image.open(img_paths)
-            new_image2 = image1.resize((600, 400))
-            st.write("<div class='stAlert success'>{}</div>".format("Defect Detected Image "), unsafe_allow_html=True)
-            st.warning('Image path of defected Image : {}'.format(file_path))
-            st.image(new_image2, use_column_width=True)
-            st.write("<div class='stAlert success'>{}</div>".format("Succesulfully detected:"),unsafe_allow_html=True)
-            printresult(str)
-            os.remove(file_path)
+                        image1 = Image.open(img_paths)
+                        new_image2 = image1.resize((600, 400))
+                        st.write("<div class='stAlert success'>{}</div>".format("Defect Detected Image "), unsafe_allow_html=True)
+                        st.image(new_image2, use_column_width=True)
+                        st.info('Image path of defected Image : {}'.format(file_path))
+                        st.write("<div class='stAlert success'>{}</div>".format("Succesulfully detected:"),unsafe_allow_html=True)
+                        printresult(str)
+                        os.remove(file_path)
+    except:
+        st.write('Please Upload Image Correctly', icon="🚨")
+
 def printresult(str):
      occur=[]
      my_str=""
@@ -341,8 +374,13 @@ def printresult(str):
      #st.write("Succesulfully detected:")
      for i in range(len(occur)):
          if occur[i] != 0:
-             st.warning(f'({count})  {occur[i]} {target[i]}  detected')
-             count+=1
+             if i == 0 or i == 1 or i == 5 or i == 6 or i == 7 or i == 8 or i == 9:
+             #st.info(f'({count})  {occur[i]} {target[i]}  detected')
+                st.warning(f' ⚠️  {occur[i]} {target[i]}  detected')
+                count+=1
+             else:
+                 st.info(f'✅  {occur[i]} {target[i]}  detected')
+                 count+=1
              #my_str.join(occur[i] + "times" +target[i])   
                   
              
@@ -404,7 +442,8 @@ def main():
     with st.sidebar:
             
          st.sidebar.title('⚙️ Choose option')
-         datasrc = st.sidebar.radio("Select input source.", ['From Device', 'From URL'])
+         #datasrc = st.sidebar.radio("Select input source.", ['From Device', 'From URL'])
+         datasrc = st.sidebar.radio("Select input source.", ['From Device'])
     
 
         # st.markdown(
@@ -432,12 +471,12 @@ def main():
         # st.subheader('Select options left-haned menu bar.')
         
         # st.sidebar.markdown("https://github.com/thepbordin/Obstacle-Detection-for-Blind-people-Deployment")
-       
+    st.write("<div class='stAlert success'>{}</div>".format("Test Your Image Here"),unsafe_allow_html=True) 
     if datasrc == "From Device":
             imgInput()
 
-    elif datasrc == "From URL":
-            urlInput()
+    #elif datasrc == "From URL":
+            #urlInput()
 
 
 if __name__ == '__main__':
